@@ -37,7 +37,6 @@
     <Content Include="static\main.css">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="requirements.txt" />
     <Content Include="templates\doctor_help.html" />
     <Content Include="templates\home.html" />
     <Content Include="templates\layout.html" />
