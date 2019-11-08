@@ -1,10 +1,10 @@
 from flask import Flask, render_template, url_for,flash, redirect
-from forms import RegistrationForm, LoginForm
+from forms import patient_RegistrationForm, doctor_RegistrationForm, patient_LoginForm,doctor_LoginForm
+
 app = Flask(__name__)
 
 #Encryption Key
 app.config['SECRET_KEY'] = 'jxtbgnrflzfqwcdsswxwahpcsdfpfehk'
-
 
 #Homepage
 @app.route('/')
@@ -12,21 +12,38 @@ app.config['SECRET_KEY'] = 'jxtbgnrflzfqwcdsswxwahpcsdfpfehk'
 def home():
     return render_template('home.html')
 
-#Loginpage
+#PatientLoginpage
 @app.route('/')
-@app.route("/login",methods=['GET','POST'])
-def login():
-    form = LoginForm()
-    return render_template('login.html', title='login',form=form)
+@app.route("/login_patient",methods=['GET','POST'])
+def login_patient():
+    form = patient_LoginForm()
+    return render_template('patient_login.html', title='login',form=form)
+
+#DoctorLoginpage
+@app.route('/')
+@app.route("/login_doctor",methods=['GET','POST'])
+def login_doctor():
+    form = doctor_LoginForm()
+    return render_template('doctor_login.html', title='login',form=form)
+
 
 #Registerpage
-@app.route("/register",methods=['GET','POST'])
-def register():
-    form = RegistrationForm()
+@app.route("/register_patient",methods=['GET','POST'])
+def register_patient():
+    form = patient_RegistrationForm()
     if form.validate_on_submit():
         flash(f'Account Created for {form.username.data}!','success')
         return redirect(url_for('home'))
-    return render_template('register.html',title='Register',form=form)
+    return render_template('register_patient.html',title='Register',form=form)
+
+#Registerpage
+@app.route("/register_doctor",methods=['GET','POST'])
+def register_doctor():
+    form = doctor_RegistrationForm()
+    if form.validate_on_submit():
+        flash(f'Account Created for {form.username.data}!','success')
+        return redirect(url_for('home'))
+    return render_template('register_doctor.html',title='Register',form=form)
 
 
 #Doctor help page

@@ -39,10 +39,12 @@
     </Content>
     <Content Include="requirements.txt" />
     <Content Include="templates\doctor_help.html" />
+    <Content Include="templates\patient_login.html" />
     <Content Include="templates\home.html" />
     <Content Include="templates\layout.html" />
-    <Content Include="templates\login.html" />
-    <Content Include="templates\register.html" />
+    <Content Include="templates\doctor_login.html" />
+    <Content Include="templates\register_patient.html" />
+    <Content Include="templates\register_doctor.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="static\" />
