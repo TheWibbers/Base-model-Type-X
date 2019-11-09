@@ -12,6 +12,13 @@ app.config['SECRET_KEY'] = 'jxtbgnrflzfqwcdsswxwahpcsdfpfehk'
 def home():
     return render_template('home.html')
 
+#AboutPage
+@app.route('/')
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
+
 #PatientLoginpage
 @app.route('/')
 @app.route("/login_patient",methods=['GET','POST'])
@@ -32,16 +39,16 @@ def login_doctor():
 def register_patient():
     form = patient_RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account Created for {form.username.data}!','success')
-        return redirect(url_for('home'))
-    return render_template('register_patient.html',title='Register',form=form)
+        flash(f'Account Created for {form.patient_username.data}','success')
+        return redirect(url_for('register_doctor'))
+    return render_template('register_patient.html',title='Register', form=form)
 
 #Registerpage
 @app.route("/register_doctor",methods=['GET','POST'])
 def register_doctor():
     form = doctor_RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account Created for {form.username.data}!','success')
+        flash(f'Account Created for {form.doctor_username.data}!','success')
         return redirect(url_for('home'))
     return render_template('register_doctor.html',title='Register',form=form)
 

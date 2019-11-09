@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\nea type 1"
+    "\\nea type 1",
+    "\\nea type 1\\templates"
   ],
-  "SelectedNode": "\\nea type 1\\app.py",
+  "SelectedNode": "\\nea type 1.sln",
   "PreviewInSolutionExplorer": false
 }

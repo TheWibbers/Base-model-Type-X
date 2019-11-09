@@ -10,39 +10,42 @@
 
             <div class="form-group">
                 {{ form.patient_email.label(class="form-control-label") }}
-
                 {% if form.patient_email.errors %}
-                {{ form.patient_email(class="form-control form-control-lg form-control is-invalid ") }}
-                <div class="invalid-feedback">
-                    {% for error in form.patient_email.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
+                    {{ form.patient_email(class="form-control form-control-lg form-control is-invalid ") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.patient_email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
                 {% else %}
-                {{ form.patient_email(class="form-control form-control-lg") }}
+                    {{ form.patient_email(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+
             <div class="form-group">
                 {{ form.patient_password.label(class="form-control-label") }}
                 {% if form.patient_password.errors %}
-                {{ form.patient_password(class="form-control form-control-lg form-control is-invalid ") }}
-                <div class="invalid-feedback">
-                    {% for error in form.password.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+                    {{ form.patient_password(class="form-control form-control-lg form-control is-invalid ") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
                 </div>
                 {% else %}
-                {{ form.patient_password(class="form-control form-control-lg") }}
+                    {{ form.patient_password(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+
             <div class="form-check">
                 {{ form.remember(class="form-check-input") }}
                 {{ form.remember.label(class="form-check-label") }}
             </div>
+
         </fieldset>
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
+
         <small class="text-muted ml-2">
             <a href="#">Forgot password?</a>
         </small>

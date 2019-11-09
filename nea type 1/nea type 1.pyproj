@@ -38,6 +38,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="requirements.txt" />
+    <Content Include="templates\about.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="templates\doctor_help.html" />
     <Content Include="templates\patient_login.html" />
     <Content Include="templates\home.html" />
