@@ -69,7 +69,7 @@
                     {% if form.doctor_code.errors %}
                         {{ form.doctor_code(class="form-control form-control-lg form-control is-invalid ") }}
                         <div class="invalid-feedback">
-                            {% for errors in form.doctor_code %}
+                            {% for errors in form.doctor_code.errors %}
                                 <span>{{ errors }}</span>
                             {% endfor %}
                         </div>
@@ -83,10 +83,5 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
-    </div>
-    <div class="border-top pt-0">
-        <small class="text-muted">
-            Already Have and An Account? <a class="ml-2" href="{{ url_for('login_doctor') }}">Sign In</a>
-        </small>
     </div>
 {% endblock content %}

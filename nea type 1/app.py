@@ -39,8 +39,8 @@ def login_doctor():
 def register_patient():
     form = patient_RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account Created for {form.patient_username.data}','success')
-        return redirect(url_for('register_doctor'))
+        flash(f'Welcome {form.patient_username.data} , an account has been created for you','success')
+        return redirect(url_for('home'))
     return render_template('register_patient.html',title='Register', form=form)
 
 #Registerpage

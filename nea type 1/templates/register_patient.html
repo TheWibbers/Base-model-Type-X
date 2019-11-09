@@ -55,7 +55,7 @@
                     {% if form.patient_confirm_password.errors %}
                         {{ form.patient_confirm_password(class="form-control form-control-lg form-control is-invalid ") }}
                         <div class="invalid-feedback">
-                            {% for errors in form.patient_confirm_password %}
+                            {% for errors in form.patient_confirm_password.errors %}
                                 <span>{{ errors }}</span>
                             {% endfor %}
                         </div>
@@ -69,10 +69,5 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
-    </div>
-    <div class="border-top pt-0">
-        <small class="text-muted">
-            Already Have and An Account? <a class="ml-2" href="{{ url_for('login_patient') }}">Sign In</a>
-        </small>
     </div>
 {% endblock content %}
