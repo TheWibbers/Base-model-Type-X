@@ -28,30 +28,43 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
-    <Compile Include="forms.py">
+    <Compile Include="app\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\models.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\routes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="models.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="static\doctor_help.css" />
-    <Content Include="static\main.css">
+    <Content Include="app\site.db" />
+    <Content Include="app\static\doctor_help.css" />
+    <Content Include="app\static\main.css">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="requirements.txt" />
-    <Content Include="templates\about.html">
+    <Content Include="app\templates\about.html">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="templates\doctor_help.html" />
-    <Content Include="templates\patient_login.html" />
-    <Content Include="templates\home.html" />
-    <Content Include="templates\layout.html" />
-    <Content Include="templates\doctor_login.html" />
-    <Content Include="templates\register_patient.html" />
-    <Content Include="templates\register_doctor.html" />
+    <Content Include="app\templates\doctor_help.html" />
+    <Content Include="app\templates\patient_login.html" />
+    <Content Include="app\templates\home.html" />
+    <Content Include="app\templates\layout.html" />
+    <Content Include="app\templates\doctor_login.html" />
+    <Content Include="app\templates\register_patient.html" />
+    <Content Include="app\templates\register_doctor.html" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="static\" />
-    <Folder Include="templates\" />
+    <Folder Include="app\" />
+    <Folder Include="app\static\" />
+    <Folder Include="app\templates\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
