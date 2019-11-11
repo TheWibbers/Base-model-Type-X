@@ -45,7 +45,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\site.db" />
+    <Content Include="data.db" />
     <Content Include="app\static\doctor_help.css" />
     <Content Include="app\static\main.css">
       <SubType>Code</SubType>

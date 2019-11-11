@@ -3,7 +3,7 @@ from app import app, db, bcrypt
 from app.models import Patient, Doctor
 from app.forms import patient_RegistrationForm, doctor_RegistrationForm, patient_LoginForm,doctor_LoginForm
 
-
+db.create_all()
 
 #Homepage
 @app.route('/')
@@ -50,8 +50,7 @@ def register_patient():
         patient = Patient(patient_username = form.patient_username.data, patient_email = form.patient_email.data, patient_password = hashed_password)
         db.session.add(patient)
         db.session.commit()
-        flash('Your account has been created', 'success')
-        return redirect(url_for('patient_login'))
+        return redirect(url_for('login_patient'))
     return render_template('register_patient.html',title='Register', form=form)
 
 #Registerpage
@@ -60,11 +59,10 @@ def register_doctor():
     form = doctor_RegistrationForm()
     if form.validate_on_submit():
         flash(f'Account Created for {form.doctor_username.data}!','success')
-        hashed_password = bcrypt.generate_password_hash(form.patient_password.data).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(form.doctor_password.data).decode('utf-8')
         doctor = Doctor(doctor_username = form.doctor_username.data, doctor_email = form.doctor_email.data, doctor_password = hashed_password)
         db.session.add(doctor)
         db.session.commit()
-        flash('Your account has been created','success')
         return redirect(url_for('doctor_login'))
     return render_template('register_doctor.html',title='Register',form=form)
 

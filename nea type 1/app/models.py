@@ -1,6 +1,7 @@
 from datetime import datetime
 from app import db
 
+
 class Patient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     patient_username = db.Column(db.String(20),unique=True, nullable=False)
@@ -18,4 +19,4 @@ class Doctor(db.Model):
     idcode = db.Column(db.String(20),unique=True, nullable=False)
 
     def __repr__(self): #how is printed out
-        return f"Doctor('{self.doctor_username}', '{self.doctor_email}', '{self.idcode}"
+        return f"Doctor('{self.doctor_username}', '{self.doctor_email}', '{self.idcode}')"
