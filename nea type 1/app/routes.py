@@ -17,7 +17,6 @@ def home():
 def about():
     return render_template('about.html')
 
-
 #PatientLoginpage
 @app.route('/')
 @app.route("/login_patient",methods=['GET','POST'])
@@ -58,12 +57,12 @@ def register_patient():
 def register_doctor():
     form = doctor_RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account Created for {form.doctor_username.data}!','success')
         hashed_password = bcrypt.generate_password_hash(form.doctor_password.data).decode('utf-8')
         doctor = Doctor(doctor_username = form.doctor_username.data, doctor_email = form.doctor_email.data, doctor_password = hashed_password)
         db.session.add(doctor)
         db.session.commit()
-        return redirect(url_for('doctor_login'))
+        flash(f'Account Created for {form.doctor_username.data}!','success')
+        return redirect(url_for('login_doctor'))
     return render_template('register_doctor.html',title='Register',form=form)
 
 

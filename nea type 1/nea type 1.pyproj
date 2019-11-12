@@ -40,9 +40,6 @@
     <Compile Include="app\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="models.py">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="data.db" />
