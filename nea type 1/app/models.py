@@ -1,9 +1,19 @@
 from datetime import datetime
-from app import db
+from app import db, login_manager
+from flask_login import UserMixin
 #was __main__
 
 
-class Patient(db.Model):
+@login_manager.user_loader
+def load_patient(user_id):
+    return Patient.query.get(int(user_id))
+
+@login_manager.user_loader
+def load_Doctor(user_id):
+    return Doctor.query.get(int(user_id))
+
+
+class Patient(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     patient_username = db.Column(db.String(20),unique=False, nullable=False)
     patient_email = db.Column(db.String(50), unique=True, nullable=False)
@@ -12,7 +22,7 @@ class Patient(db.Model):
     def __repr__(self): #how is printed out
         return f"Patient('{self.patient_username}', '{self.patient_email}')"
 
-class Doctor(db.Model):
+class Doctor(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     doctor_username = db.Column(db.String(20),unique=False, nullable=False)
     doctor_email = db.Column(db.String(50), unique=True, nullable=False)

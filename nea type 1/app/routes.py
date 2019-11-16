@@ -2,6 +2,8 @@ from flask import render_template, url_for,flash, redirect
 from app import app, db, bcrypt
 from app.models import Patient, Doctor
 from app.forms import patient_RegistrationForm, doctor_RegistrationForm, patient_LoginForm,doctor_LoginForm
+from flask_login import LoginManager
+login_manager = LoginManager(app)
 
 db.create_all()
 
@@ -18,25 +20,36 @@ def about():
     return render_template('about.html')
 
 #PatientLoginpage
-@app.route('/')
-@app.route("/login_patient",methods=['GET','POST'])
+@app.route("/login_patient", methods=['GET','POST'])
 def login_patient():
     form = patient_LoginForm()
+
     if form.validate_on_submit():
-        if form.patient_email.data == 'samuelthomas342@yahoo.co.uk' and form.patient_password.data == 'password':
-            flash('Logged in','success')
+        patient = Patient.query.filter_by(patient_email = form.patient_email.data).first()
+
+        if patient and bcrypt.check_password_hash(patient.patient_password, form.patient_password.data):
             return redirect(url_for('home'))
         else:
-            flash('Login failed. Check input details','danger')
+            flash('Login Unsuccessful. Check your email and password', 'danger')
 
     return render_template('patient_login.html', title='login',form=form)
 
 #DoctorLoginpage
-@app.route('/')
 @app.route("/login_doctor",methods=['GET','POST'])
 def login_doctor():
     form = doctor_LoginForm()
+
+    if form.validate_on_submit():
+        doctor = Doctor.query.filter_by(doctor_email = form.doctor_email.data).first()
+
+        if doctor and bcrypt.check_password_hash(doctor.doctor_password, form.doctor_password.data):
+            return redirect(url_for('home'))
+            flash('Login successful.', 'success')
+        else:
+            flash('Login Unsuccessful. Check your email and password', 'danger')
+
     return render_template('doctor_login.html', title='login',form=form)
+    
 
 
 #Registerpage
