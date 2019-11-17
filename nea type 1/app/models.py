@@ -30,3 +30,13 @@ class Doctor(db.Model, UserMixin):
 
     def __repr__(self): #how is printed out
         return f"Doctor('{self.doctor_username}', '{self.doctor_email}')"
+
+class Patient_Book(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    patient_month = db.Column(db.String(20),unique=False, nullable=False)
+    patient_day = db.Column(db.String(50), unique=False, nullable=False)
+    patient_time = db.Column(db.String(60),unique=False, nullable=False)
+
+    def __repr__(self): #how is printed out
+        return f"PatientBook('{self.patient_month}', '{self.patient_day}','{self.patient_time}')"
+

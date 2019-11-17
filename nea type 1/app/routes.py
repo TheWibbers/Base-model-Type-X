@@ -1,7 +1,7 @@
 from flask import render_template, url_for,flash, redirect
 from app import app, db, bcrypt
-from app.models import Patient, Doctor
-from app.forms import patient_RegistrationForm, doctor_RegistrationForm, patient_LoginForm,doctor_LoginForm
+from app.models import Patient, Doctor, Patient_Book
+from app.forms import patient_RegistrationForm, doctor_RegistrationForm, patient_LoginForm,doctor_LoginForm, patient_Book_Form
 from flask_login import LoginManager
 login_manager = LoginManager(app)
 
@@ -13,13 +13,57 @@ db.create_all()
 def home():
     return render_template('home.html')
 
+#patient message
+@app.route('/')
+@app.route("/patient_message")
+def patient_message():
+    return render_template('patient_message.html')
+
+#doctor message
+@app.route('/')
+@app.route("/doctor_message")
+def doctor_message():
+    return render_template('doctor_message.html')
+
+#doctor appointmentpage
+@app.route('/')
+@app.route("/doctor_appointment")
+def doctor_appointment():
+    return render_template('doctor_appointment.html')
+
+#PatientHomePage
+@app.route('/')
+@app.route("/patient_home")
+def patient_home():
+    return render_template('patient_home.html')
+
+#DoctorHomePage
+@app.route('/')
+@app.route("/doctor_home")
+def doctor_home():
+    return render_template('doctor_home.html')
+
 #AboutPage
 @app.route('/')
 @app.route("/about")
 def about():
     return render_template('about.html')
 
+#Doctor help page
+@app.route('/')
+@app.route('/Doctor Help')
+def doctor_help():
+    return render_template('doctor_help.html')
+
+#patient appointmentpage #########################
+@app.route('/')
+@app.route("/patient_appointment", methods=['GET','POST'])
+def patient_appointment():
+    form = patient_Book_Form()
+
+
 #PatientLoginpage
+@app.route('/')
 @app.route("/login_patient", methods=['GET','POST'])
 def login_patient():
     form = patient_LoginForm()
@@ -28,13 +72,14 @@ def login_patient():
         patient = Patient.query.filter_by(patient_email = form.patient_email.data).first()
 
         if patient and bcrypt.check_password_hash(patient.patient_password, form.patient_password.data):
-            return redirect(url_for('home'))
+            return redirect(url_for('patient_home')) #routes to patient homepage
         else:
             flash('Login Unsuccessful. Check your email and password', 'danger')
 
     return render_template('patient_login.html', title='login',form=form)
 
 #DoctorLoginpage
+@app.route('/')
 @app.route("/login_doctor",methods=['GET','POST'])
 def login_doctor():
     form = doctor_LoginForm()
@@ -50,9 +95,8 @@ def login_doctor():
 
     return render_template('doctor_login.html', title='login',form=form)
     
-
-
 #Registerpage
+@app.route('/')
 @app.route("/register_patient",methods=['GET','POST'])
 def register_patient():
     form = patient_RegistrationForm()
@@ -66,6 +110,7 @@ def register_patient():
     return render_template('register_patient.html',title='Register', form=form)
 
 #Registerpage
+@app.route('/')
 @app.route("/register_doctor",methods=['GET','POST'])
 def register_doctor():
     form = doctor_RegistrationForm()
@@ -77,9 +122,3 @@ def register_doctor():
         flash(f'Account Created for {form.doctor_username.data}!','success')
         return redirect(url_for('login_doctor'))
     return render_template('register_doctor.html',title='Register',form=form)
-
-
-#Doctor help page
-@app.route('/Doctor Help')
-def doctor_help():
-    return render_template('doctor_help.html')

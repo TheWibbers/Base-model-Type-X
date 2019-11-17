@@ -1,8 +1,14 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextField
 from wtforms.validators import DataRequired , Length , EqualTo, Email, ValidationError
-from app.models import Patient, Doctor
+from app.models import Patient, Doctor, Patient_Book
 from flask_login import login_user
+
+class patient_Book_Form(FlaskForm):
+    patient_month = StringField('Month', validators=[DataRequired()])
+    patient_day = StringField('Day', validators=[DataRequired()])
+    patient_time = StringField('Time', validators=[DataRequired()])
+    submit = SubmitField('Confirm')
 
 class patient_RegistrationForm(FlaskForm):
     patient_username = StringField('Username', validators=[DataRequired(),Length(min=5,max=20)])
@@ -16,7 +22,6 @@ class patient_RegistrationForm(FlaskForm):
         #newpatient = Patient.query.filter_by(patient_username = patient_username.data).first()
         #if newpatient:
             #raise ValidationError('The username you have chosen is already taken, please choose anther')
-
 
     def validate_email(Patient, patient_email): #validate_email
         patient = Patient.query.filter_by(patient_email = patient_email.data).first()
@@ -41,7 +46,6 @@ class doctor_RegistrationForm(FlaskForm):
         if doctor:
             raise ValidationError('The email you have chosen is already taken, please choose anther')
 
-
 class patient_LoginForm(FlaskForm):
     patient_email = StringField('Email',validators=[DataRequired(), Email()])
     patient_password = PasswordField('Password',validators=[DataRequired()])
@@ -53,5 +57,7 @@ class doctor_LoginForm(FlaskForm):
     doctor_password = PasswordField('Password',validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+
 
 

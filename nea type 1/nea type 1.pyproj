@@ -42,6 +42,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\appointment.css" />
+    <Content Include="app\templates\patient_appointment.html" />
+    <Content Include="app\templates\patient_home.html" />
+    <Content Include="app\templates\doctor_message.html" />
+    <Content Include="app\templates\patient_message.html" />
     <Content Include="data.db" />
     <Content Include="app\static\doctor_help.css" />
     <Content Include="app\static\main.css">
