@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextField
 from wtforms.validators import DataRequired , Length , EqualTo, Email, ValidationError
 from app.models import Patient, Doctor, Patient_Book
-from flask_login import login_user
+from flask_login import LoginManager,login_user, current_user, logout_user
 
 class patient_Book_Form(FlaskForm):
     patient_month = StringField('Month', validators=[DataRequired()])

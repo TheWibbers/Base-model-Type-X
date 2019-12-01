@@ -2,7 +2,7 @@ from flask import render_template, url_for,flash, redirect
 from app import app, db, bcrypt
 from app.models import Patient, Doctor, Patient_Book
 from app.forms import patient_RegistrationForm, doctor_RegistrationForm, patient_LoginForm,doctor_LoginForm, patient_Book_Form
-from flask_login import LoginManager
+from flask_login import LoginManager,login_user, current_user, logout_user, login_required
 login_manager = LoginManager(app)
 
 db.create_all()
@@ -16,6 +16,7 @@ def home():
 #patient message
 @app.route('/')
 @app.route("/patient_message")
+@login_required
 def patient_message():
     return render_template('patient_message.html')
 
@@ -66,6 +67,8 @@ def patient_appointment():
 @app.route('/')
 @app.route("/login_patient", methods=['GET','POST'])
 def login_patient():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = patient_LoginForm()
 
     if form.validate_on_submit():
@@ -82,6 +85,8 @@ def login_patient():
 @app.route('/')
 @app.route("/login_doctor",methods=['GET','POST'])
 def login_doctor():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = doctor_LoginForm()
 
     if form.validate_on_submit():
@@ -99,6 +104,8 @@ def login_doctor():
 @app.route('/')
 @app.route("/register_patient",methods=['GET','POST'])
 def register_patient():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = patient_RegistrationForm()
     if form.validate_on_submit():
         flash(f'Welcome {form.patient_username.data} , an account has been created for you','success')
@@ -113,6 +120,8 @@ def register_patient():
 @app.route('/')
 @app.route("/register_doctor",methods=['GET','POST'])
 def register_doctor():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = doctor_RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.doctor_password.data).decode('utf-8')
@@ -122,3 +131,7 @@ def register_doctor():
         flash(f'Account Created for {form.doctor_username.data}!','success')
         return redirect(url_for('login_doctor'))
     return render_template('register_doctor.html',title='Register',form=form)
+
+@app.route("/account")
+def account():
+    return render_template('account.html', title='Account')
