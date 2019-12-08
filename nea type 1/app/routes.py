@@ -1,137 +1,118 @@
-from flask import render_template, url_for,flash, redirect
+#ROUTING FILE
+
+#IMPORTS
+import os
+import secrets
+from flask import render_template, url_for,flash, redirect, abort
 from app import app, db, bcrypt
-from app.models import Patient, Doctor, Patient_Book
-from app.forms import patient_RegistrationForm, doctor_RegistrationForm, patient_LoginForm,doctor_LoginForm, patient_Book_Form
-from flask_login import LoginManager,login_user, current_user, logout_user, login_required
-login_manager = LoginManager(app)
+from app.models import User, Appointment #import 'User' Model from model.py
+from app.forms import User_registrationform, LoginForm, app_book #Import forms for HTML pages (login and register)
+from flask_login import login_user, current_user, logout_user, login_required #Flask login imports
 
 db.create_all()
 
-#Homepage
+month_list = ['January','Febuary','March','April','May','June','July','August','September','November','December']
+
+#ALL BELOW DOES NOT REQUIRE USER_AUTHENTIFICATON
+
 @app.route('/')
-@app.route("/homepage")
+@app.route("/home")
 def home():
     return render_template('home.html')
 
-#patient message
-@app.route('/')
-@app.route("/patient_message")
-@login_required
-def patient_message():
-    return render_template('patient_message.html')
-
-#doctor message
-@app.route('/')
-@app.route("/doctor_message")
-def doctor_message():
-    return render_template('doctor_message.html')
-
-#doctor appointmentpage
-@app.route('/')
-@app.route("/doctor_appointment")
-def doctor_appointment():
-    return render_template('doctor_appointment.html')
-
-#PatientHomePage
-@app.route('/')
-@app.route("/patient_home")
-def patient_home():
-    return render_template('patient_home.html')
-
-#DoctorHomePage
-@app.route('/')
-@app.route("/doctor_home")
-def doctor_home():
-    return render_template('doctor_home.html')
-
-#AboutPage
-@app.route('/')
 @app.route("/about")
 def about():
     return render_template('about.html')
 
-#Doctor help page
-@app.route('/')
-@app.route('/Doctor Help')
-def doctor_help():
-    return render_template('doctor_help.html')
-
-#patient appointmentpage #########################
-@app.route('/')
-@app.route("/patient_appointment", methods=['GET','POST'])
-def patient_appointment():
-    form = patient_Book_Form()
-
-
-#PatientLoginpage
-@app.route('/')
-@app.route("/login_patient", methods=['GET','POST'])
-def login_patient():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = patient_LoginForm()
-
+@app.route("/login", methods=['GET','POST'])
+def login():
+    form = LoginForm()
     if form.validate_on_submit():
-        patient = Patient.query.filter_by(patient_email = form.patient_email.data).first()
-
-        if patient and bcrypt.check_password_hash(patient.patient_password, form.patient_password.data):
-            return redirect(url_for('patient_home')) #routes to patient homepage
+        user = User.query.filter_by(email = form.email.data).first() #quering database if username and email exists
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user) #logs user in
+            email_check = User.query.filter_by(email=form.email.data).first()
+            id_check = email_check.type_code
+            if id_check == '0': #ID CHECK 0 = PATIENT
+                return redirect(url_for('patient_hub'))
+            if id_check == '1': #ID CHECK 1 = DOCTOR
+                return redirect(url_for('doctor_hub'))
         else:
-            flash('Login Unsuccessful. Check your email and password', 'danger')
+            flash('Login Unsuccessful. Check your email and password', 'danger') #infomation does not exist
+    return render_template('login.html', title='login',form=form)
 
-    return render_template('patient_login.html', title='login',form=form)
-
-#DoctorLoginpage
 @app.route('/')
-@app.route("/login_doctor",methods=['GET','POST'])
-def login_doctor():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = doctor_LoginForm()
-
+@app.route("/register",methods=['GET','POST'])
+def register():
+    form = User_registrationform()
     if form.validate_on_submit():
-        doctor = Doctor.query.filter_by(doctor_email = form.doctor_email.data).first()
-
-        if doctor and bcrypt.check_password_hash(doctor.doctor_password, form.doctor_password.data):
-            return redirect(url_for('home'))
-            flash('Login successful.', 'success')
-        else:
-            flash('Login Unsuccessful. Check your email and password', 'danger')
-
-    return render_template('doctor_login.html', title='login',form=form)
-    
-#Registerpage
-@app.route('/')
-@app.route("/register_patient",methods=['GET','POST'])
-def register_patient():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = patient_RegistrationForm()
-    if form.validate_on_submit():
-        flash(f'Welcome {form.patient_username.data} , an account has been created for you','success')
-        hashed_password = bcrypt.generate_password_hash(form.patient_password.data).decode('utf-8')
-        patient = Patient(patient_username = form.patient_username.data, patient_email = form.patient_email.data, patient_password = hashed_password)
-        db.session.add(patient)
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username = form.username.data, email = form.email.data, type_code = form.type_code.data, password = hashed_password)
+        db.session.add(user)
         db.session.commit()
-        return redirect(url_for('login_patient'))
-    return render_template('register_patient.html',title='Register', form=form)
+        flash(f'Welcome {form.username.data} , an account has been created for you','success')
+    return render_template('register.html',title='Register', form=form)
 
-#Registerpage
-@app.route('/')
-@app.route("/register_doctor",methods=['GET','POST'])
-def register_doctor():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = doctor_RegistrationForm()
+
+#ALL BELOW REQUIRES USER_AUTHENTIFICATON
+
+#'@login_required' function checks user authentification.
+
+@app.route("/appointment", methods=['GET', 'POST'])
+@login_required
+def appointment():
+    form = app_book()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.doctor_password.data).decode('utf-8')
-        doctor = Doctor(doctor_username = form.doctor_username.data, doctor_email = form.doctor_email.data, doctor_password = hashed_password)
-        db.session.add(doctor)
-        db.session.commit()
-        flash(f'Account Created for {form.doctor_username.data}!','success')
-        return redirect(url_for('login_doctor'))
-    return render_template('register_doctor.html',title='Register',form=form)
+        appointment = Appointment(month=form.month.data, date=form.date.data, time=form.time.data, message=form.message.data, author = current_user.email)
+        if appointment.month in month_list:
+            db.session.add(appointment)
+            db.session.commit()
+            flash(f'Appointment created','success')
+        elif appointment.month not in month_list:
+            flash(f'{form.month.data} is not a valid month','danger')
+
+    return render_template('appointment.html', title = "Appointment book", form=form)
+
+
+#@app.route("/appointment")
+#@login_required
+#def appointment():
+    #return render_template('appointment.html')
+
+#@app.route("/appointment/<appointment_id>")
+#def appointment(appointment_id):
+    #appointment = Appointment.query.get_or_404(appointment_id)
+    #return render_template('appointment.html')
+
+@app.route("/doctor_appointment")
+@login_required
+def doctor_appointment():
+    appointments = Appointment.query.all()
+    return render_template('doctor_appointment.html',title = "Appointments", appointments = appointments, month_list = ['January','Febuary','March','April','May','June','July','August','September','November','December'], month_number = 1)
+
+@app.route("/patient_hub")
+@login_required
+def patient_hub():
+    appointments = Appointment.query.all()
+    return render_template('patient_hub.html', appointments = appointments)
+
+@app.route("/doctor_hub")
+@login_required
+def doctor_hub():
+    return render_template('doctor_hub.html')
+
+@app.route("/message")
+@login_required
+def message():
+    return render_template('message.html')
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 @app.route("/account")
+@login_required
 def account():
     return render_template('account.html', title='Account')

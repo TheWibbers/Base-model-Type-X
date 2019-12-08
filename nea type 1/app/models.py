@@ -1,42 +1,32 @@
 from datetime import datetime
 from app import db, login_manager
 from flask_login import UserMixin
-#was __main__
-
 
 @login_manager.user_loader
-def load_patient(user_id):
-    return Patient.query.get(int(user_id))
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
-@login_manager.user_loader
-def load_Doctor(user_id):
-    return Doctor.query.get(int(user_id))
-
-
-class Patient(db.Model, UserMixin):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    patient_username = db.Column(db.String(20),unique=False, nullable=False)
-    patient_email = db.Column(db.String(50), unique=True, nullable=False)
-    patient_password = db.Column(db.String(60), nullable=False)
+    username = db.Column(db.String(20),unique=False, nullable=False)
+    email = db.Column(db.String(50), unique=True, nullable=False)
+    type_code = db.Column(db.String(10), unique=False,nullable=True) #does not need to input
+    password = db.Column(db.String(60), nullable=False)
+    #appointments = db.relationship('Appointment', backref='author', lazy=True)
+    
+    def __repr__(self): 
+        return f"Patient('{self.username}', '{self.email}', '{self.type_code}')"
 
-    def __repr__(self): #how is printed out
-        return f"Patient('{self.patient_username}', '{self.patient_email}')"
-
-class Doctor(db.Model, UserMixin):
+class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    doctor_username = db.Column(db.String(20),unique=False, nullable=False)
-    doctor_email = db.Column(db.String(50), unique=True, nullable=False)
-    doctor_password = db.Column(db.String(60), nullable=False)
+    month = db.Column(db.String(20),unique=False, nullable=False)
+    date = db.Column(db.String(50), unique=False, nullable=False)
+    time = db.Column(db.String(10), unique=False,nullable=False) 
+    message = db.Column(db.String(60), nullable=False)
+    author = db.Column(db.String(60))
+    #user_id = db.Column(db.Integer, db.ForeignKey('user_id'), nullable = False)
 
-    def __repr__(self): #how is printed out
-        return f"Doctor('{self.doctor_username}', '{self.doctor_email}')"
 
-class Patient_Book(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    patient_month = db.Column(db.String(20),unique=False, nullable=False)
-    patient_day = db.Column(db.String(50), unique=False, nullable=False)
-    patient_time = db.Column(db.String(60),unique=False, nullable=False)
-
-    def __repr__(self): #how is printed out
-        return f"PatientBook('{self.patient_month}', '{self.patient_day}','{self.patient_time}')"
-
+    
+    def __repr__(self): 
+        return f"Patient('{self.month}', '{self.date}', '{self.time}','{self.message}')"

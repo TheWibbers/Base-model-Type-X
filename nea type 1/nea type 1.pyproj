@@ -43,11 +43,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\appointment.css" />
-    <Content Include="app\templates\patient_appointment.html" />
-    <Content Include="app\templates\patient_home.html" />
-    <Content Include="app\templates\doctor_message.html" />
-    <Content Include="app\templates\patient_message.html" />
-    <Content Include="data.db" />
+    <Content Include="app\static\message.css" />
+    <Content Include="app\templates\account.html" />
+    <Content Include="app\templates\doctor_appointment.html" />
+    <Content Include="app\templates\appointment.html" />
+    <Content Include="app\templates\register.html" />
+    <Content Include="app\templates\doctor_hub.html" />
+    <Content Include="app\templates\patient_hub.html" />
+    <Content Include="app\templates\message.html" />
     <Content Include="app\static\doctor_help.css" />
     <Content Include="app\static\main.css">
       <SubType>Code</SubType>
@@ -55,13 +58,9 @@
     <Content Include="app\templates\about.html">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="app\templates\doctor_help.html" />
-    <Content Include="app\templates\patient_login.html" />
+    <Content Include="app\templates\login.html" />
     <Content Include="app\templates\home.html" />
     <Content Include="app\templates\layout.html" />
-    <Content Include="app\templates\doctor_login.html" />
-    <Content Include="app\templates\register_patient.html" />
-    <Content Include="app\templates\register_doctor.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />

@@ -1,63 +1,42 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField
 from wtforms.validators import DataRequired , Length , EqualTo, Email, ValidationError
-from app.models import Patient, Doctor, Patient_Book
-from flask_login import LoginManager,login_user, current_user, logout_user
+from app.models import User, Appointment
 
-class patient_Book_Form(FlaskForm):
-    patient_month = StringField('Month', validators=[DataRequired()])
-    patient_day = StringField('Day', validators=[DataRequired()])
-    patient_time = StringField('Time', validators=[DataRequired()])
-    submit = SubmitField('Confirm')
+month_list = ['January','Febuary','March','April','May','June','July','August','September','November','December']
 
-class patient_RegistrationForm(FlaskForm):
-    patient_username = StringField('Username', validators=[DataRequired(),Length(min=5,max=20)])
-    patient_email = StringField('Email', validators=[DataRequired(), Email()])
-    patient_password = StringField('Password', validators=[DataRequired()])
-    patient_confirm_password = StringField('Confirm Password', validators=[DataRequired(),EqualTo('patient_password')])
+class User_registrationform(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(),Length(min=5,max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = StringField('Password', validators=[DataRequired()])
+    confirm_password = StringField('Confirm Password', validators=[DataRequired(),EqualTo('password')])
+    type_code = BooleanField('I am a Medical Official',default=False)
     submit = SubmitField('Sign Up')
     
-    #validation
-    #def validate_username(Patient, patient_username):
-        #newpatient = Patient.query.filter_by(patient_username = patient_username.data).first()
-        #if newpatient:
-            #raise ValidationError('The username you have chosen is already taken, please choose anther')
-
-    def validate_email(Patient, patient_email): #validate_email
-        patient = Patient.query.filter_by(patient_email = patient_email.data).first()
-        if patient:
+    def validate_email(self, email):
+        user = User.query.filter_by(email = email.data).first()
+        if user:
             raise ValidationError('The email you have chosen is already taken, please choose anther')
 
-class doctor_RegistrationForm(FlaskForm):
-    doctor_username = StringField('Username', validators=[DataRequired(), Length(min=5,max=20)])
-    doctor_email = StringField('Email', validators=[DataRequired(), Email()])
-    doctor_password = StringField('Password', validators=[DataRequired()])
-    doctor_confirm_password = StringField('Confirm Password',validators=[DataRequired(),EqualTo('doctor_password')])
-    submit = SubmitField('Sign Up')
 
-    #validation
-    #def validate_field(Doctor, doctor_username):
-        #doctor = doctor.query.filter_by(doctor_username = doctor_username.data).first()
-        #if doctor:
-            #raise ValidationError('The username you have chosen is already taken, please choose anther')
-
-    def validate_email(Doctor, doctor_email): #validate_email
-        doctor = Doctor.query.filter_by(doctor_email = doctor_email.data).first()
-        if doctor:
-            raise ValidationError('The email you have chosen is already taken, please choose anther')
-
-class patient_LoginForm(FlaskForm):
-    patient_email = StringField('Email',validators=[DataRequired(), Email()])
-    patient_password = PasswordField('Password',validators=[DataRequired()])
-    remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
-
-class doctor_LoginForm(FlaskForm):
-    doctor_email = StringField('Email',validators=[DataRequired(), Email()])
-    doctor_password = PasswordField('Password',validators=[DataRequired()])
-    remember = BooleanField('Remember Me')
+class LoginForm(FlaskForm):
+    email = StringField('Email',validators=[DataRequired(), Email()])
+    password = PasswordField('Password',validators=[DataRequired()])
+    remember = BooleanField('Remember Me',default=False)
     submit = SubmitField('Login')
 
 
+class app_book(FlaskForm):
+    month = StringField('Month',validators=[DataRequired()])
+    date = StringField('Day',validators=[DataRequired()])
+    time = StringField('Time',validators=[DataRequired()])
+    message = TextAreaField('Message',validators=[DataRequired()])
+    submit = SubmitField('Seek Appointment')
 
+#class app_book(FlaskForm):
+    #month = SelectField('Month',validators=[DataRequired()], choices=[('January','Febuary','March','April','May','June','July','August','September','November','December')])
+    #date = SelectField('Day',validators=[DataRequired()],choices=[('1','2','3','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29')])
+    #time = StringField('Time 24 Clock',validators=[DataRequired()])
+    #message = TextAreaField('Message',validators=[DataRequired()])
+    #submit = SubmitField('Seek Appointment')
 
